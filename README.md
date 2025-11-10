@@ -97,7 +97,7 @@ We provide **six Jupyter notebooks** corresponding to each experimental phase:
 | `5_ablation_feature_transform.ipynb` | Examines removing PointNet’s feature transform regularizer to see its effect on geometric invariance. |
 
 ### Implementation Highlights
-
+- **Installation** pip install -r requirements.txt
 - **Framework:** PyTorch  
 - **Model Wrapping:** All SNN models are implemented via a `SpikeModel` wrapper around the baseline PointNet backbone.  
 - **Training:** Uses Adam optimizer with gradient clipping and validation-based checkpointing.  
