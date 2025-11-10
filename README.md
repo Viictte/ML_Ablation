@@ -26,7 +26,7 @@ These experiments modify the *structure or mechanism* of the model to isolate th
 #### 1. Temporal Integration Sensitivity  
 **(Notebook 1 – Ablation on Timesteps)**  
 The original work explicitly highlights that *training with large time steps leads to optimization instability*, and therefore introduces the “**trained-less but learning-more**” paradigm — training with one timestep but inferring with multiple ones.  
-Our experiment systematically varies \\(T ∈ \\{1,2,4,8\\}\\) to test whether the same performance gains (ensemble-like improvement) still hold, and to quantify where diminishing returns occur.
+Our experiment systematically varies **T ∈ {1,2,4,8}** to test whether the same performance gains (ensemble-like improvement) still hold, and to quantify where diminishing returns occur.
 
 #### 2. Premapping Impact  
 **(Notebook 2 – Ablation on Premap Layer)**  
@@ -47,13 +47,13 @@ These experiments focus on *training stability and optimization behavior* of spi
 
 #### 4. Temperature Scaling  
 **(Notebook 3 – Surrogate Gradient Temperature)**  
-In Section 3.3 of the paper, the authors analyze the surrogate gradient parameter \\(k\\), corresponding to the *inverse temperature* controlling spike smoothness.  
-They found that **\\(k = 5\\)** (moderate temperature) provides the best trade-off — sharper gradients cause explosion, while smaller \\(k\\) causes vanishing gradients.  
-We replicate and extend this by sweeping across multiple temperature values (equivalent to varying \\(k\\)) to confirm the robustness of the surrogate-gradient regime.
+In Section 3.3 of the paper, the authors analyze the surrogate gradient parameter **k**, corresponding to the *inverse temperature* controlling spike smoothness.  
+They found that **k = 5** (moderate temperature) provides the best trade-off — sharper gradients cause explosion, while smaller **k** causes vanishing gradients.  
+We replicate and extend this by sweeping across multiple temperature values (equivalent to varying **k**) to confirm the robustness of the surrogate-gradient regime.
 
 #### 5. Membrane Decay Rate  
 **(Notebook 4 – Membrane Decay/Leak)**  
-The Spiking-PointNet paper adopts the **Leaky Integrate-and-Fire (LIF)** neuron model with leak coefficient \\(λ ≈ 0.2 – 0.25\\) as standard.  
+The Spiking-PointNet paper adopts the **Leaky Integrate-and-Fire (LIF)** neuron model with leak coefficient **λ ≈ 0.2 – 0.25** as standard.  
 However, the paper does not perform a sensitivity analysis on this decay term.  
 We therefore vary the leak/decay rate to study how long-term membrane retention affects accuracy and temporal ensemble effects, especially under their “membrane potential perturbation” enhancement.
 
