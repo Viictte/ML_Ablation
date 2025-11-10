@@ -15,16 +15,58 @@ The **original Spiking-PointNet paper** proposed:
 
 ## Motivation
 
-While the original Spiking-PointNet demonstrated feasibility, many open questions remain about its **behavior under different training and architectural conditions**.  
-Our motivation for this work is to **systematically analyze and understand** these design trade-offs through controlled ablation experiments. Specifically, we aim to answer:
+The Spiking-PointNet paper identified two fundamental challenges in adapting spiking neural networks (SNNs) to 3D point clouds:
+1. **The optimization difficulty of large-timestep SNNs due to exploding or vanishing surrogate gradients.**
+2. **The high computational cost of PointNet-style architectures when scaled to spiking domains.**
+To address these open issues and understand the design trade-offs, our experiments are divided into two categories: Ablation Studies and Hyperparameter Studies.
 
-1. **Temporal Integration Sensitivity** – How does the number of timesteps \(T\) influence performance and stability?  
-2. **Premapping Impact** – Does introducing a learnable premap (feature transform) before the spiking encoder improve or destabilize training?  
-3. **Temperature Scaling** – How sensitive is surrogate gradient learning to the temperature parameter controlling spike smoothness?  
-4. **Membrane Decay Rate** – What role does leak/decay play in retaining or forgetting membrane potential information across timesteps?  
-5. **Feature Transform Regularization** – How important is the PointNet’s original spatial transformer network (STN) for SNN variants?
+### 🧩 **Ablation Studies**
+These experiments modify the *structure or mechanism* of the model to isolate the importance of specific components proposed or discussed in the original paper.
 
-These questions are crucial for adapting spiking architectures to practical 3D perception tasks, where low-power operation must be balanced against accuracy and training stability.
+#### 1. Temporal Integration Sensitivity  
+**(Notebook 1 – Ablation on Timesteps)**  
+The original work explicitly highlights that *training with large time steps leads to optimization instability*, and therefore introduces the “**trained-less but learning-more**” paradigm — training with one timestep but inferring with multiple ones【326†SpikePointNet.pdf†L310-L364】.  
+Our experiment systematically varies \\(T ∈ \\{1,2,4,8\\}\\) to test whether the same performance gains (ensemble-like improvement) still hold, and to quantify where diminishing returns occur.
+
+#### 2. Premapping Impact  
+**(Notebook 2 – Ablation on Premap Layer)**  
+While the original paper focused on optimizing PointNet’s structure for efficiency, it did not explore early feature remapping before spiking conversion.  
+We hypothesize that a lightweight *premap (linear or MLP) transform* can improve the representation stability of input coordinates prior to LIF integration, especially when used under the single-timestep training regime.  
+This experiment tests whether such pre-activation normalization helps convergence and accuracy.
+
+#### 3. Feature Transform Regularization  
+**(Notebook 5 – Ablation on Feature Transform)**  
+The Spiking-PointNet retains PointNet’s use of a **spatial transformer network (STN)** for rotation invariance【326†SpikePointNet.pdf†L240-L283】.  
+However, its necessity for spiking neurons was never empirically verified.  
+We therefore remove the STN to quantify its real contribution under spiking dynamics and evaluate whether geometric invariance remains preserved without it.
+
+---
+
+### ⚙️ **Hyperparameter Studies**
+These experiments focus on *training stability and optimization behavior* of spiking neurons, guided by the original hyperparameter selections in the paper.
+
+#### 4. Temperature Scaling  
+**(Notebook 3 – Surrogate Gradient Temperature)**  
+In Section 3.3 of the paper, the authors analyze the surrogate gradient parameter \\(k\\), corresponding to the *inverse temperature* controlling spike smoothness.  
+They found that **\\(k = 5\\)** (moderate temperature) provides the best trade-off — sharper gradients cause explosion, while smaller \\(k\\) causes vanishing gradients【326†SpikePointNet.pdf†L342-L364】【326†SpikePointNet.pdf†L364-L400】.  
+We replicate and extend this by sweeping across multiple temperature values (equivalent to varying \\(k\\)) to confirm the robustness of the surrogate-gradient regime.
+
+#### 5. Membrane Decay Rate  
+**(Notebook 4 – Membrane Decay/Leak)**  
+The Spiking-PointNet paper adopts the **Leaky Integrate-and-Fire (LIF)** neuron model with leak coefficient \\(λ ≈ 0.2 – 0.25\\) as standard【326†SpikePointNet.pdf†L285-L320】.  
+However, the paper does not perform a sensitivity analysis on this decay term.  
+We therefore vary the leak/decay rate to study how long-term membrane retention affects accuracy and temporal ensemble effects, especially under their “membrane potential perturbation” enhancement【326†SpikePointNet.pdf†L400-L480】.
+
+---
+
+### 🎯 **Why These Experiments Matter**
+
+Together, these controlled studies directly probe the key mechanisms that the original authors only partially explored:
+
+- **Ablation** reveals which architectural elements (temporal depth, premap, feature transform) truly matter for efficient spiking-point processing.  
+- **Hyperparameter** sweeps validate the theoretical design decisions (temperature = k = 5; leak ≈ 0.2–0.25) proposed in the paper and test their generalization under different regimes.
+
+This combination not only replicates the core claims of *Spiking-PointNet* but extends them into a deeper quantitative understanding of stability, accuracy, and neuromorphic efficiency.
 
 ---
 
