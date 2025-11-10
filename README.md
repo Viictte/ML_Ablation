@@ -97,11 +97,11 @@ We provide **six Jupyter notebooks** corresponding to each experimental phase:
 | `5_ablation_feature_transform.ipynb` | Examines removing PointNet’s feature transform regularizer to see its effect on geometric invariance. |
 
 ### Implementation Highlights
-- **Installation:** ```console pip install -r requirements.txt```
+
 - **Framework:** PyTorch  
 - **Model Wrapping:** All SNN models are implemented via a `SpikeModel` wrapper around the baseline PointNet backbone.  
 - **Training:** Uses Adam optimizer with gradient clipping and validation-based checkpointing.  
-- **Visualization:** Each notebook generates accuracy/loss curves, summary tables, and comparison bar charts saved under `../log/figures/`.  
+- **Visualization:** Each notebook generates accuracy/loss curves, summary tables, and comparison bar charts saved under `../log/figures/`. 
 - **Automation:** Unified experiment runner (`run_all_studies()`) manages training, evaluation, and caching.
 
 ---
@@ -156,7 +156,7 @@ The notebooks serve as a reproducible, modular benchmark for future research on 
 
 1. **Install dependencies**
    ```bash
-   pip install torch numpy tqdm matplotlib
+   pip install -r requirements.txt
    ```
 
 2. **Download dataset**
