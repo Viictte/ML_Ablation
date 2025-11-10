@@ -1,13 +1,13 @@
-# Spiking-PointNet Ablation Studies
+# Spike-PointNet Ablation Studies
 
 ## Introduction
 
-This repository reproduces and extends the **Spiking-PointNet** model — a biologically inspired spiking neural network (SNN) version of the classical [PointNet](https://arxiv.org/abs/1612.00593) architecture — designed for efficient processing of 3D point-cloud data such as those in ModelNet40.  
+This repository reproduces and extends the **Spike-PointNet** model — a biologically inspired Spike neural network (SNN) version of the classical [PointNet](https://arxiv.org/abs/1612.00593) architecture — designed for efficient processing of 3D point-cloud data such as those in ModelNet40.  
 
-Unlike conventional PointNet, which uses continuous activations and dense matrix operations, Spiking-PointNet replaces them with event-driven spiking neurons that emit discrete pulses when membrane potentials exceed a threshold. This yields sparse, temporally distributed computation that more closely resembles the operation of biological neurons and allows lower-power inference on neuromorphic hardware.
+Unlike conventional PointNet, which uses continuous activations and dense matrix operations, Spike-PointNet replaces them with event-driven Spike neurons that emit discrete pulses when membrane potentials exceed a threshold. This yields sparse, temporally distributed computation that more closely resembles the operation of biological neurons and allows lower-power inference on neuromorphic hardware.
 
-The **original Spiking-PointNet paper** proposed:
-- A spiking conversion of PointNet layers using membrane integration and surrogate gradient training.
+The **original Spike-PointNet paper** proposed:
+- A Spike conversion of PointNet layers using membrane integration and surrogate gradient training.
 - Multi-timestep inference to capture temporal coding in static point clouds.
 - Comparable accuracy to dense PointNet while achieving significant theoretical energy savings.
 
@@ -15,9 +15,9 @@ The **original Spiking-PointNet paper** proposed:
 
 ## Motivation
 
-The Spiking-PointNet paper identified two fundamental challenges in adapting spiking neural networks (SNNs) to 3D point clouds:
+The Spike-PointNet paper identified two fundamental challenges in adapting Spike neural networks (SNNs) to 3D point clouds:
 1. **The optimization difficulty of large-timestep SNNs due to exploding or vanishing surrogate gradients.**
-2. **The high computational cost of PointNet-style architectures when scaled to spiking domains.**
+2. **The high computational cost of PointNet-style architectures when scaled to Spike domains.**
 To address these open issues and understand the design trade-offs, our experiments are divided into two categories: Ablation Studies and Hyperparameter Studies.
 
 ### 🧩 **Ablation Studies**
@@ -30,20 +30,20 @@ Our experiment systematically varies **T ∈ {1,2,4,8}** to test whether the sam
 
 #### 2. Premapping Impact  
 **(Notebook 2 – Ablation on Premap Layer)**  
-While the original paper focused on optimizing PointNet’s structure for efficiency, it did not explore early feature remapping before spiking conversion.  
+While the original paper focused on optimizing PointNet’s structure for efficiency, it did not explore early feature remapping before Spike conversion.  
 We hypothesize that a lightweight *premap (linear or MLP) transform* can improve the representation stability of input coordinates prior to LIF integration, especially when used under the single-timestep training regime.  
 This experiment tests whether such pre-activation normalization helps convergence and accuracy.
 
 #### 3. Feature Transform Regularization  
 **(Notebook 5 – Ablation on Feature Transform)**  
-The Spiking-PointNet retains PointNet’s use of a **spatial transformer network (STN)** for rotation invariance.  
-However, its necessity for spiking neurons was never empirically verified.  
-We therefore remove the STN to quantify its real contribution under spiking dynamics and evaluate whether geometric invariance remains preserved without it.
+The Spike-PointNet retains PointNet’s use of a **spatial transformer network (STN)** for rotation invariance.  
+However, its necessity for Spike neurons was never empirically verified.  
+We therefore remove the STN to quantify its real contribution under Spike dynamics and evaluate whether geometric invariance remains preserved without it.
 
 ---
 
 ### ⚙️ **Hyperparameter Studies**
-These experiments focus on *training stability and optimization behavior* of spiking neurons, guided by the original hyperparameter selections in the paper.
+These experiments focus on *training stability and optimization behavior* of Spike neurons, guided by the original hyperparameter selections in the paper.
 
 #### 4. Temperature Scaling  
 **(Notebook 3 – Surrogate Gradient Temperature)**  
@@ -53,7 +53,7 @@ We replicate and extend this by sweeping across multiple temperature values (equ
 
 #### 5. Membrane Decay Rate  
 **(Notebook 4 – Membrane Decay/Leak)**  
-The Spiking-PointNet paper adopts the **Leaky Integrate-and-Fire (LIF)** neuron model with leak coefficient **λ ≈ 0.2 – 0.25** as standard.  
+The Spike-PointNet paper adopts the **Leaky Integrate-and-Fire (LIF)** neuron model with leak coefficient **λ ≈ 0.2 – 0.25** as standard.  
 However, the paper does not perform a sensitivity analysis on this decay term.  
 We therefore vary the leak/decay rate to study how long-term membrane retention affects accuracy and temporal ensemble effects, especially under their “membrane potential perturbation” enhancement.
 
@@ -63,10 +63,10 @@ We therefore vary the leak/decay rate to study how long-term membrane retention 
 
 Together, these controlled studies directly probe the key mechanisms that the original authors only partially explored:
 
-- **Ablation** reveals which architectural elements (temporal depth, premap, feature transform) truly matter for efficient spiking-point processing.  
+- **Ablation** reveals which architectural elements (temporal depth, premap, feature transform) truly matter for efficient Spike-point processing.  
 - **Hyperparameter** sweeps validate the theoretical design decisions (temperature = k = 5; leak ≈ 0.2–0.25) proposed in the paper and test their generalization under different regimes.
 
-This combination not only replicates the core claims of *Spiking-PointNet* but extends them into a deeper quantitative understanding of stability, accuracy, and neuromorphic efficiency.
+This combination not only replicates the core claims of *Spike-PointNet* but extends them into a deeper quantitative understanding of stability, accuracy, and neuromorphic efficiency.
 
 ---
 
@@ -89,7 +89,7 @@ We provide **six Jupyter notebooks** corresponding to each experimental phase:
 
 | Notebook | Description |
 |-----------|--------------|
-| `0_baseline_reproduction.ipynb` | Reproduction of the original PointNet baseline and Spiking-PointNet model to verify correctness. |
+| `0_baseline_reproduction.ipynb` | Reproduction of the original PointNet baseline and Spike-PointNet model to verify correctness. |
 | `1_ablation_timesteps.ipynb` | Sweeps over timestep values \(T \in \{1,2,4,8\}\) to observe accuracy vs. temporal depth. |
 | `2_ablation_premap.ipynb` | Tests with and without the premap (input feature mapping layer). |
 | `3_ablation_temperature.ipynb` | Studies surrogate gradient temperature scaling \(τ\) and its effect on spike sparsity and convergence. |
@@ -110,8 +110,8 @@ We provide **six Jupyter notebooks** corresponding to each experimental phase:
 
 After analyzing all experiment logs and plots:
 
-### 1. Baseline vs. Spiking
-- The spiking version achieves **comparable final test accuracy** (~88–90%) to the dense baseline (~90–91%), confirming effective surrogate training.
+### 1. Baseline vs. Spike
+- The Spike version achieves **comparable final test accuracy** (~88–90%) to the dense baseline (~90–91%), confirming effective surrogate training.
 - Training is slower in convergence but notably more stable after 30 epochs, showing consistent upward accuracy trends.
 
 ### 2. Timestep Ablation
@@ -133,22 +133,22 @@ After analyzing all experiment logs and plots:
 
 ### 6. Feature Transform Ablation
 - Removing PointNet’s **feature transform (STN)** reduces invariance to rotations and degrades accuracy by 1–2%.  
-- The effect is magnified in spiking models, where spatial perturbations propagate through time.
+- The effect is magnified in Spike models, where spatial perturbations propagate through time.
 
 ### 7. Energy Efficiency Insight
 - Operation count estimates show **up to 70% theoretical energy reduction** vs. dense PointNet for equivalent accuracy when using 4 timesteps.  
-- This validates the promise of spiking architectures for neuromorphic 3D perception.
+- This validates the promise of Spike architectures for neuromorphic 3D perception.
 
 ---
 
 ## Conclusion
 
 Our comprehensive ablation reveals that:
-- Spiking-PointNet retains PointNet-level accuracy with drastically lower compute costs.
+- Spike-PointNet retains PointNet-level accuracy with drastically lower compute costs.
 - Optimal configuration lies around **T=4**, **decay≈0.9**, **temperature=2–3**, with premap and feature transforms enabled.
 - These experiments clarify how each architectural and temporal factor affects convergence, generalization, and energy efficiency.
 
-The notebooks serve as a reproducible, modular benchmark for future research on **spiking 3D perception networks**, bridging the gap between neuroscience-inspired computation and geometric deep learning.
+The notebooks serve as a reproducible, modular benchmark for future research on **Spike 3D perception networks**, bridging the gap between neuroscience-inspired computation and geometric deep learning.
 
 ---
 
@@ -178,5 +178,5 @@ The notebooks serve as a reproducible, modular benchmark for future research on 
 ## Citation
 
 If you use this work, please cite:
-> Ren et al., “Spiking PointNet: Spiking Neural Network for 3D Point Cloud Processing,” *arXiv:2310.07189*, 2023.  
-> This repository: “Spiking-PointNet Ablation Studies — Extended Reproduction and Analysis,” 2025.
+> Ren et al., “Spike PointNet: Spike Neural Network for 3D Point Cloud Processing,” *arXiv:2310.07189*, 2023.  
+> This repository: “Spike-PointNet Ablation Studies — Extended Reproduction and Analysis,” 2025.
