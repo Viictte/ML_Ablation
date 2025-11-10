@@ -25,7 +25,7 @@ These experiments modify the *structure or mechanism* of the model to isolate th
 
 #### 1. Temporal Integration Sensitivity  
 **(Notebook 1 – Ablation on Timesteps)**  
-The original work explicitly highlights that *training with large time steps leads to optimization instability*, and therefore introduces the “**trained-less but learning-more**” paradigm — training with one timestep but inferring with multiple ones【326†SpikePointNet.pdf†L310-L364】.  
+The original work explicitly highlights that *training with large time steps leads to optimization instability*, and therefore introduces the “**trained-less but learning-more**” paradigm — training with one timestep but inferring with multiple ones.  
 Our experiment systematically varies \\(T ∈ \\{1,2,4,8\\}\\) to test whether the same performance gains (ensemble-like improvement) still hold, and to quantify where diminishing returns occur.
 
 #### 2. Premapping Impact  
@@ -36,7 +36,7 @@ This experiment tests whether such pre-activation normalization helps convergenc
 
 #### 3. Feature Transform Regularization  
 **(Notebook 5 – Ablation on Feature Transform)**  
-The Spiking-PointNet retains PointNet’s use of a **spatial transformer network (STN)** for rotation invariance【326†SpikePointNet.pdf†L240-L283】.  
+The Spiking-PointNet retains PointNet’s use of a **spatial transformer network (STN)** for rotation invariance.  
 However, its necessity for spiking neurons was never empirically verified.  
 We therefore remove the STN to quantify its real contribution under spiking dynamics and evaluate whether geometric invariance remains preserved without it.
 
@@ -48,14 +48,14 @@ These experiments focus on *training stability and optimization behavior* of spi
 #### 4. Temperature Scaling  
 **(Notebook 3 – Surrogate Gradient Temperature)**  
 In Section 3.3 of the paper, the authors analyze the surrogate gradient parameter \\(k\\), corresponding to the *inverse temperature* controlling spike smoothness.  
-They found that **\\(k = 5\\)** (moderate temperature) provides the best trade-off — sharper gradients cause explosion, while smaller \\(k\\) causes vanishing gradients【326†SpikePointNet.pdf†L342-L364】【326†SpikePointNet.pdf†L364-L400】.  
+They found that **\\(k = 5\\)** (moderate temperature) provides the best trade-off — sharper gradients cause explosion, while smaller \\(k\\) causes vanishing gradients.  
 We replicate and extend this by sweeping across multiple temperature values (equivalent to varying \\(k\\)) to confirm the robustness of the surrogate-gradient regime.
 
 #### 5. Membrane Decay Rate  
 **(Notebook 4 – Membrane Decay/Leak)**  
-The Spiking-PointNet paper adopts the **Leaky Integrate-and-Fire (LIF)** neuron model with leak coefficient \\(λ ≈ 0.2 – 0.25\\) as standard【326†SpikePointNet.pdf†L285-L320】.  
+The Spiking-PointNet paper adopts the **Leaky Integrate-and-Fire (LIF)** neuron model with leak coefficient \\(λ ≈ 0.2 – 0.25\\) as standard.  
 However, the paper does not perform a sensitivity analysis on this decay term.  
-We therefore vary the leak/decay rate to study how long-term membrane retention affects accuracy and temporal ensemble effects, especially under their “membrane potential perturbation” enhancement【326†SpikePointNet.pdf†L400-L480】.
+We therefore vary the leak/decay rate to study how long-term membrane retention affects accuracy and temporal ensemble effects, especially under their “membrane potential perturbation” enhancement.
 
 ---
 
